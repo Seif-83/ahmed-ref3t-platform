@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
             <h2 className="text-4xl font-extrabold text-gray-900">مرحلتك الدراسية</h2>
             <div className="mt-4 h-1.5 w-24 bg-sky-500 mx-auto rounded-full"></div>
             <p className="mt-6 text-gray-600 max-w-2xl mx-auto text-lg">
-              كل ما تحتاجه للتفوق في مادة الرياضيات.
+              كل ما تحتاجه لتتعلم العربية وتتحقق من مستواكك مع معلم العربية.
             </p>
           </div>
 
@@ -165,7 +165,7 @@ const HomePage: React.FC = () => {
             <section className="mt-16">
               <div className="text-center mb-8">
                 <h3 className="text-3xl font-extrabold">اختبارات لمرحلتك</h3>
-                <p className="text-gray-500 mt-2">حل اختبارات نشرت من قبل المعلم لقياس مستواك</p>
+                <p className="text-gray-500 mt-2">حل اختبارات نشرت من قبل معلم العربية لقياس مستواكك</p>
               </div>
 
               <div className="max-w-4xl mx-auto px-4">
@@ -644,8 +644,8 @@ const App: React.FC = () => {
         <footer className="bg-gray-900 text-gray-400 py-20 px-4 relative z-10">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-center text-center md:text-right">
             <div>
-              <h3 className="text-white text-2xl font-extrabold mb-4">الأستاذ عمرو محسن</h3>
-              <p className="text-lg">رحلتك نحو التميز في مادة الرياضيات تبدأ من هنا.</p>
+              <h3 className="text-white text-2xl font-extrabold mb-4">معلم العربية أحمد رفعت</h3>
+              <p className="text-lg">رحلتك نحو إتقان اللغة العربية تبدأ من هنا.</p>
             </div>
             <div className="flex justify-center gap-6">
               <a href="https://www.facebook.com/share/18EimSRbRB/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-sky-500 hover:text-white transition-all" title="فيسبوك">
@@ -659,7 +659,7 @@ const App: React.FC = () => {
               </a>
             </div>
             <div className="text-sm">
-              &copy; {new Date().getFullYear()} جميع الحقوق محفوظة لمنصة الأستاذ عمرو محسن التعليمية
+              &copy; {new Date().getFullYear()} جميع الحقوق محفوظة لمنصة معلم العربية أحمد رفعت
             </div>
           </div>
         </footer>

@@ -15,15 +15,15 @@ const Hero: React.FC = () => {
           {/* Text Section (7 Columns on Large Screens) */}
           <div className="lg:col-span-7 text-right order-1">
             <h1 className="text-5xl lg:text-7xl font-black text-gray-900 leading-tight mb-8">
-              <span className="block mb-4 text-gray-800">الرياضيات اسهل مع</span>
-              <span className="block science-gradient bg-clip-text text-transparent">الأستاذ عمرو محسن</span>
+              <span className="block mb-4 text-gray-800">العربية تفتح لك أبوابها مع</span>
+              <span className="block science-gradient bg-clip-text text-transparent">أحمد رفعت</span>
             </h1>
             <p className="mt-8 text-2xl text-gray-600 leading-relaxed max-w-2xl font-medium">
-              نفتح لك أبواب التميز في مادة الرياضيات. شروحات مبسطة، تمارين تفاعلية، ومتابعة دقيقة لكل طالب.
+              دروس عربية مبسطة، تمارين تفاعلية، ومتابعة دقيقة لكل طالب في رحلة تعلم اللغة العربية.
             </p>
             <div className="mt-12 flex flex-wrap gap-6 justify-center lg:justify-start">
               <a href="https://wa.me/201211143632" className="px-12 py-5 science-gradient text-white text-xl font-bold rounded-[2rem] shadow-2xl shadow-sky-500/40 hover:scale-105 transition-all flex items-center gap-3">
-                <span>تواصل معنا الآن</span>
+                <span>تواصل مع معلم العربية</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </a>
             </div>

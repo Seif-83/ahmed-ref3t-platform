@@ -1,6 +1,6 @@
 {
-  "name": "Mr. Amr Mohsen - Math Platform",
-  "description": "An interactive Science education platform for preparatory stages, featuring video lessons, study materials, and an AI-powered Science Tutor.",
+  "name": "منصة أحمد رفعت - منصة تعليمية عربية",
+  "description": "منصة تعليمية عربية لمراحل الدراسة، تشمل فيديوهات الدروس، المذكرات، ومتابعة تقدم الطلاب.",
   "requestFramePermissions": [
     "microphone"
   ]
