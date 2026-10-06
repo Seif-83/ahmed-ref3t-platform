@@ -19,57 +19,6 @@ import { useExamStore } from './useExamStore';
 import { useStudentStore } from './useStudentStore';
 import ErrorBoundary from './components/ErrorBoundary';
 
-const MathBackground: React.FC = () => {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-slate-50 blueprint-grid">
-      {/* Decorative Radial Gradients */}
-      <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-sky-400/10 blur-[120px] rounded-full"></div>
-      <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-teal-400/10 blur-[120px] rounded-full"></div>
-
-      {/* Animated Glassmorphic Symbols */}
-      <div className="absolute top-[15%] left-[10%] animate-science-float">
-        <div className="math-symbol-glass text-sky-500/40 shadow-xl overflow-hidden group">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="transform group-hover:scale-110 transition-transform duration-700">
-            {/* Main stylized Pi */}
-            <path d="M4 4.5C4 4.22386 4.22386 4 4.5 4H19.5C19.7761 4 20 4.22386 20 4.5V5.5C20 5.77614 19.7761 6 19.5 6H18.2C17.5 6 17 6.5 17 7.2V17C17 18.7 15.7 20 14 20H13.5C12.7 20 12 19.3 12 18.5V7C12 6.4 11.6 6 11 6H8.5C7.7 6 7 6.7 7 7.5V17C7 18.1 6.1 19 5 19H4.5C4.2 19 4 18.8 4 18.5V17.5" strokeLinecap="round" />
-            {/* Inner accent line */}
-            <path d="M14.5 6V18" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.4" />
-            <path d="M9.5 6V17" stroke="currentColor" strokeWidth="0.5" strokeOpacity="0.4" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="absolute bottom-[20%] right-[15%] animate-science-sway" style={{ animationDelay: '2s' }}>
-        <div className="math-symbol-glass text-teal-500/40 shadow-xl">
-          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M12 12c-2.5-4-6.5-4-9 0s2.5 8 9 0c2.5 4 6.5 4 9 0s-2.5-8-9 0z" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="absolute top-[45%] right-[20%] animate-science-float" style={{ animationDelay: '4s' }}>
-        <div className="math-symbol-glass text-sky-600/30 shadow-xl">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 4H6l6 8-6 8h12" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="absolute bottom-[35%] left-[25%] animate-science-pulse">
-        <div className="math-symbol-glass text-teal-600/30 shadow-sm">
-          <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path d="M18 4h-10l-2 15-3-5" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Smaller dots/shapes for depth */}
-      <div className="absolute top-[30%] left-[40%] w-2 h-2 bg-sky-300/40 rounded-full animate-ping"></div>
-      <div className="absolute bottom-[40%] right-[35%] w-3 h-3 border border-teal-300/40 rotate-45 animate-pulse"></div>
-    </div>
-  );
-};
-
 const HomePage: React.FC = () => {
   const { levels, isLoading } = useContentStore();
   const [isStudentLoggedIn, setIsStudentLoggedIn] = useState(false);
@@ -617,7 +566,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="min-h-screen flex flex-col relative bg-slate-50">
-        <MathBackground />
         <Navbar />
         <main className="flex-grow">
           <ErrorBoundary>

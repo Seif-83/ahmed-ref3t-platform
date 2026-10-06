@@ -34,20 +34,20 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-[#f7f2e8]/90 backdrop-blur-xl border-b border-emerald-900/10 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
 
 
           <div className="hidden md:flex items-center space-x-reverse space-x-6">
-            <Link to="/" className="text-gray-600 hover:text-sky-600 font-medium transition-colors">الرئيسية</Link>
+            <Link to="/" className="text-emerald-900 hover:text-amber-700 font-bold transition-colors">الرئيسية</Link>
             {isStudentLoggedIn ? (
               <div className="flex items-center gap-3">
                 <a
                   href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-bold text-sm hover:shadow-lg hover:shadow-green-500/30 transition-all flex items-center gap-2"
+                  className="arabic-gradient text-white px-4 py-2 rounded-full font-bold text-sm hover:shadow-lg hover:shadow-emerald-900/30 transition-all flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 10m10 0l2-10m0 0h2.4M17 7l-2 10" /></svg>
                   وسيلة دفع
@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <Link to="/login" className="bg-gradient-to-r from-sky-500 to-teal-400 text-white px-5 py-2 rounded-full font-bold text-sm hover:shadow-lg hover:shadow-sky-500/30 transition-all">
+              <Link to="/login" className="arabic-gradient text-white px-5 py-2 rounded-full font-bold text-sm hover:shadow-lg hover:shadow-emerald-900/30 transition-all">
                 تسجيل الدخول
               </Link>
             )}
@@ -125,12 +125,12 @@ const Navbar: React.FC = () => {
 
             {/* Drawer Links - vertically scrollable if needed */}
             <div className="flex-1 overflow-y-auto py-4 px-4 space-y-2">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-right text-lg font-medium text-gray-700 hover:text-sky-600 py-3 px-4 rounded-xl hover:bg-sky-50 transition-all border-b border-gray-50">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-right text-lg font-medium text-emerald-900 hover:text-amber-700 py-3 px-4 rounded-xl hover:bg-emerald-50 transition-all border-b border-emerald-100">
                 الرئيسية 🏠
               </Link>
 
               {isStudentLoggedIn ? (
-                <div className="bg-sky-50 rounded-2xl p-4 mt-2">
+                <div className="bg-emerald-50 rounded-2xl p-4 mt-2">
                   <div className="text-right mb-3">
                     <span className="text-xs text-gray-500 block mb-1">مرحباً بك</span>
                     <span className="text-sky-700 font-bold text-lg">{studentName} 🎓</span>
@@ -162,7 +162,7 @@ const Navbar: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block w-full py-2 mb-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transition-all text-center"
+                    className="block w-full py-2 mb-3 arabic-gradient text-white rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transition-all text-center"
                   >
                     💳 وسيلة الدفع
                   </a>
@@ -174,7 +174,7 @@ const Navbar: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-center text-lg font-bold text-white py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-teal-400 shadow-lg shadow-sky-500/20 mt-4 transition-transform active:scale-95">
+                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-center text-lg font-bold text-white py-3 px-4 rounded-xl arabic-gradient shadow-lg shadow-emerald-900/20 mt-4 transition-transform active:scale-95">
                   تسجيل الدخول 👨‍🎓
                 </Link>
               )}
