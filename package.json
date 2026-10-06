@@ -1,9 +1,12 @@
 {
-  "name": "mr-amr-platform",
-  "homepage": "https://mr-amr-platform.vercel.app",
+  "name": "ahmed-ref3t-platform",
+  "homepage": "https://ahmed-ref3t-platform.vercel.app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
