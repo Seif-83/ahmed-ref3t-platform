@@ -78,16 +78,15 @@ const Hero: React.FC = () => {
             {/* Golden Frame Accent */}
             <div className="absolute -inset-3 rotate-2 rounded-[3rem] bg-gradient-to-tr from-amber-400/30 via-emerald-600/20 to-amber-300/40 blur-sm"></div>
 
-            <div className="relative mx-auto w-full rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-white bg-white">
+            <div className="relative mx-auto w-full aspect-[4/3] sm:aspect-video lg:aspect-[4/5] rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-white bg-emerald-950">
               <img
-                className="w-full object-cover aspect-video lg:aspect-square group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 src={siteSettings.heroImage}
                 alt="الأستاذ أحمد رفعت - معلم اللغة العربية"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent"></div>
-              
-          
             </div>
+
 
             {/* Floating Info Pill 1 */}
             <div className="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-emerald-900/10 hidden sm:flex items-center gap-3 animate-float-slow">

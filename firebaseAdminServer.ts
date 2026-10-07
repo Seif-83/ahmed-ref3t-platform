@@ -1,6 +1,4 @@
 import { X509Certificate, sign, verify } from 'node:crypto';
-import { cert, getApps, initializeApp } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
 
 type ServiceAccount = {
   project_id: string;
@@ -89,22 +87,21 @@ export async function firebaseDatabaseRequest<T>(
   return result as T;
 }
 
-function getFirebaseAdminApp() {
+export async function createFirebaseCustomToken(uid: string, claims: Record<string, unknown>): Promise<string> {
   const account = getServiceAccount();
-  const existingApp = getApps()[0];
-  if (existingApp) return existingApp;
-  return initializeApp({
-    credential: cert({
-      projectId: account.project_id,
-      clientEmail: account.client_email,
-      privateKey: account.private_key,
-    }),
-  });
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    iss: account.client_email,
+    sub: account.client_email,
+    aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+    iat: now,
+    exp: now + 3600,
+    uid,
+    claims,
+  };
+  return signJwt(payload, account);
 }
 
-export async function createFirebaseCustomToken(uid: string, claims: Record<string, unknown>): Promise<string> {
-  return getAuth(getFirebaseAdminApp()).createCustomToken(uid, claims as Record<string, string | number | boolean>);
-}
 
 export async function verifyFirebaseIdToken(idToken: string): Promise<{ uid: string; claims: Record<string, unknown> }> {
   const projectId = process.env.FIREBASE_PROJECT_ID;
