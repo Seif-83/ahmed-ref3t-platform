@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ref, onValue, set, push, remove, get, update, query, orderByChild, equalTo } from 'firebase/database';
-import { db } from './firebase';
+import { ref, onValue, remove, update } from 'firebase/database';
+import { getIdTokenResult, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { auth, db } from './firebase';
 
 export interface Student {
     id: string;
@@ -13,6 +14,18 @@ export interface Student {
 
 const DB_PATH = 'students';
 
+async function requestStudentAuth(body: Record<string, string>) {
+    const response = await fetch('/api/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+    });
+    const result = await response.json() as { token?: string; student?: Student | null; id?: string; error?: string };
+    if (!response.ok) throw new Error(result.error || 'تعذر الاتصال بقاعدة البيانات');
+    if (result.token) await signInWithCustomToken(auth, result.token);
+    return result;
+}
+
 export function useStudentStore(options: { autoListen?: boolean } = {}) {
     const { autoListen = false } = options;
     const [students, setStudents] = useState<Student[]>([]);
@@ -22,81 +35,61 @@ export function useStudentStore(options: { autoListen?: boolean } = {}) {
     useEffect(() => {
         if (!autoListen) return;
 
-        const dbRef = ref(db, DB_PATH);
-        const unsubscribe = onValue(dbRef, (snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                const studentList: Student[] = Object.keys(data).map(key => ({
-                    ...data[key],
-                    id: key,
-                }));
-                // Sort newest first
-                studentList.sort((a, b) => new Date(b.loginDate).getTime() - new Date(a.loginDate).getTime());
-                setStudents(studentList);
-            } else {
+        let unsubscribeStudents: (() => void) | undefined;
+        let authRevision = 0;
+        const unsubscribeAuth = onAuthStateChanged(auth, user => {
+            const revision = ++authRevision;
+            unsubscribeStudents?.();
+            if (!user) {
                 setStudents([]);
+                setIsLoading(false);
+                return;
             }
-            setIsLoading(false);
-        }, (error) => {
-            console.error('Firebase student read error:', error);
-            setIsLoading(false);
+
+            void getIdTokenResult(user).then(token => {
+                if (revision !== authRevision || token.claims.role !== 'admin') {
+                    setStudents([]);
+                    setIsLoading(false);
+                    return;
+                }
+
+                const dbRef = ref(db, DB_PATH);
+                unsubscribeStudents = onValue(dbRef, snapshot => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        const studentList: Student[] = Object.keys(data).map(key => ({ ...data[key], id: key }));
+                        studentList.sort((a, b) => new Date(b.loginDate).getTime() - new Date(a.loginDate).getTime());
+                        setStudents(studentList);
+                    } else {
+                        setStudents([]);
+                    }
+                    setIsLoading(false);
+                }, error => {
+                    console.error('Firebase student read error:', error);
+                    setIsLoading(false);
+                });
+            }).catch(error => {
+                console.error('Firebase admin auth error:', error);
+                if (revision === authRevision) setIsLoading(false);
+            });
         });
 
-        return () => unsubscribe();
+        return () => {
+            authRevision++;
+            unsubscribeAuth();
+            unsubscribeStudents?.();
+        };
     }, []);
 
     const loginByPhone = useCallback(async (phone: string): Promise<Student | null> => {
-        console.log('useStudentStore: loginByPhone called for:', phone);
-        const dbRef = ref(db, DB_PATH);
-        const phoneQuery = query(dbRef, orderByChild('phone'), equalTo(phone));
-
-        try {
-            // Add a 5s timeout for the fetch
-            const fetchPromise = get(phoneQuery);
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Firebase connection timeout')), 5000)
-            );
-
-            const snapshot = await Promise.race([fetchPromise, timeoutPromise]) as any;
-            console.log('useStudentStore: Received snapshot, exists:', snapshot.exists());
-
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                // Even with equalTo, it returns an object { key: value }
-                const entry = Object.entries(data)[0];
-                if (entry) {
-                    const [key, student] = entry;
-                    console.log('useStudentStore: Student found, updating lastSeen');
-                    await set(ref(db, `${DB_PATH}/${key}/lastSeen`), new Date().toISOString());
-                    return { ...(student as any), id: key };
-                }
-            }
-            console.log('useStudentStore: Student not found in database');
-        } catch (err) {
-            console.error('useStudentStore: Login error:', err);
-            throw err;
-        }
-        return null;
+        console.log('useStudentStore: loginByPhone called');
+        const result = await requestStudentAuth({ action: 'login', phone });
+        return result.student ?? null;
     }, []);
 
     const registerStudent = useCallback(async (name: string, phone: string, level: string): Promise<string> => {
-        // Check if student already exists with this phone
-        const existing = await loginByPhone(phone);
-        if (existing) {
-            throw new Error('رقم الهاتف مسجل بالفعل');
-        }
-
-        // Create new student
-        const newStudentRef = push(ref(db, DB_PATH));
-        const now = new Date().toISOString();
-        await set(newStudentRef, {
-            name: name.trim(),
-            phone: phone.trim(),
-            level: level,
-            loginDate: now,
-            lastSeen: now,
-        });
-        return newStudentRef.key || '';
+        const result = await requestStudentAuth({ action: 'register', name, phone, level });
+        return result.student?.id || '';
     }, [loginByPhone]);
 
     const removeStudent = useCallback(async (studentId: string) => {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ref, onValue, set, push, get, child } from 'firebase/database';
-import { db } from './firebase';
+import { getIdTokenResult, onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from './firebase';
 import { Exam, ExamResult } from './types';
 
 const EXAMS_PATH = 'exams';
@@ -11,36 +12,75 @@ export function useExamStore() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Failsafe: stop loading after 5 seconds even if Firebase hangs
-    const timer = setTimeout(() => {
-      console.warn('useExamStore: Loading timed out after 5s');
-      setIsLoading(false);
-    }, 5000);
-
-    console.log('useExamStore: Starting Firebase listener for path:', EXAMS_PATH);
-    const dbRef = ref(db, EXAMS_PATH);
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-      console.log('useExamStore: Received snapshot, exists:', snapshot.exists());
-      if (snapshot.exists()) {
-        const val = snapshot.val();
-        const list: Exam[] = Array.isArray(val) ? val : Object.keys(val).map(k => ({
-          ...val[k],
-          questions: val[k].questions || []
-        }));
-        setExams(list);
-      } else {
-        console.log('useExamStore: No exams found.');
+    let unsubscribeExams: (() => void) | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let authRevision = 0;
+    const unsubscribeAuth = onAuthStateChanged(auth, user => {
+      const revision = ++authRevision;
+      unsubscribeExams?.();
+      if (timer) clearTimeout(timer);
+      if (!user) {
         setExams([]);
+        setIsLoading(false);
+        return;
       }
-      setIsLoading(false);
-    }, (err) => {
-      console.error('useExamStore: Failed to read exams:', err);
-      setIsLoading(false);
+
+      setIsLoading(true);
+      void getIdTokenResult(user).then(token => {
+        if (revision !== authRevision) return;
+        if (token.claims.role === 'student') {
+          void user.getIdToken().then(idToken => fetch('/api/student-data', {
+            headers: { Authorization: `Bearer ${idToken}` },
+          })).then(async response => {
+            const result = await response.json() as { exams?: Exam[] };
+            if (!response.ok) throw new Error('Could not load student exams');
+            if (revision === authRevision) {
+              setExams(result.exams || []);
+              setIsLoading(false);
+            }
+          }).catch(error => {
+            console.error('useExamStore: Student exams error:', error);
+            if (revision === authRevision) setIsLoading(false);
+          });
+          return;
+        }
+        if (token.claims.role !== 'admin') {
+          setIsLoading(false);
+          return;
+        }
+        timer = setTimeout(() => {
+          console.warn('useExamStore: Loading timed out after 5s');
+          setIsLoading(false);
+        }, 5000);
+
+        const dbRef = ref(db, EXAMS_PATH);
+        unsubscribeExams = onValue(dbRef, snapshot => {
+          if (snapshot.exists()) {
+            const val = snapshot.val();
+            const list: Exam[] = Array.isArray(val) ? val : Object.keys(val).map(k => ({
+              ...val[k],
+              questions: val[k].questions || []
+            }));
+            setExams(list);
+          } else {
+            setExams([]);
+          }
+          setIsLoading(false);
+        }, err => {
+          console.error('useExamStore: Failed to read exams:', err);
+          setIsLoading(false);
+        });
+      }).catch(err => {
+        console.error('useExamStore: Authentication error:', err);
+        if (revision === authRevision) setIsLoading(false);
+      });
     });
 
     return () => {
-      unsubscribe();
-      clearTimeout(timer);
+      authRevision++;
+      unsubscribeAuth();
+      unsubscribeExams?.();
+      if (timer) clearTimeout(timer);
     };
   }, []);
 
@@ -68,11 +108,17 @@ export function useExamStore() {
   const listExams = useCallback(() => exams, [exams]);
 
   const submitResult = useCallback(async (result: Omit<ExamResult, 'id' | 'submittedAt'>) => {
-    const newRef = push(ref(db, EXAM_RESULTS_PATH));
-    const id = newRef.key as string;
-    const payload: ExamResult = { ...result as ExamResult, id, submittedAt: Date.now() };
-    await set(newRef, payload);
-    return id;
+    const user = auth.currentUser;
+    if (!user) throw new Error('Student is not authenticated');
+    const idToken = await user.getIdToken();
+    const response = await fetch('/api/exam-result', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify({ examId: result.examId, answers: result.answers }),
+    });
+    const payload = await response.json() as { id?: string; score?: number; maxScore?: number; error?: string };
+    if (!response.ok || !payload.id) throw new Error(payload.error || 'فشل إرسال النتيجة');
+    return payload;
   }, []);
 
   const getResultsForExam = useCallback(async (examId: string) => {

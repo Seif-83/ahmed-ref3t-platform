@@ -12,7 +12,7 @@ export const VALID_ACCESS_CODES = [
 export const DB_PATH_SETTINGS = 'site_settings';
 
 export const DEFAULT_SITE_SETTINGS = {
-  heroImage: 'sections/1st.png'
+  heroImage: 'sections/logo.png'
 };
 
 export const PREP_LEVELS_DATA: PrepData[] = [

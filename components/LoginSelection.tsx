@@ -1,26 +1,31 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const ADMIN_PASSWORD = 'amr-admin-2025';
+import { signInTeacher } from '../adminAuth';
 
 const LoginSelection: React.FC = () => {
     const navigate = useNavigate();
     const [showPasswordInput, setShowPasswordInput] = useState(false);
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleTeacherClick = () => {
         setShowPasswordInput(true);
     };
 
-    const handlePasswordSubmit = (e: React.FormEvent) => {
+    const handlePasswordSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === ADMIN_PASSWORD) {
+        setIsSubmitting(true);
+        setError('');
+        try {
+            await signInTeacher(password);
             sessionStorage.setItem('admin_authenticated', 'true');
             navigate('/admin');
-        } else {
-            setError('كلمة المرور غير صحيحة');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'تعذر إكمال تسجيل الدخول');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -31,40 +36,57 @@ const LoginSelection: React.FC = () => {
     if (showPasswordInput) {
         return (
             <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-12">
-                <div className="max-w-md w-full bg-white/70 backdrop-blur-md rounded-[2.5rem] p-10 border border-white/50 shadow-2xl text-center">
-                    <div className="w-24 h-24 bg-gradient-to-br from-sky-500 to-sky-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-sky-500/30">
-                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="max-w-md w-full glass-card rounded-[2.5rem] p-8 md:p-10 border border-white/80 shadow-2xl text-center animate-fade-in">
+                    <div className="w-20 h-20 arabic-gradient rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-950/20 border border-amber-400/30">
+                        <svg className="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
 
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">تأكيد الهوية</h2>
-                    <p className="text-gray-500 mb-8">يرجى إدخال كلمة مرور المعلم للمتابعة</p>
+                    <h2 className="text-3xl font-black text-emerald-950 mb-2 font-cairo">لوحة المعلم</h2>
+                    <p className="text-slate-600 mb-8 font-medium text-sm">يرجى إدخال كلمة مرور المعلم للمتابعة</p>
 
-                    <form onSubmit={handlePasswordSubmit} className="space-y-6">
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                            placeholder="كلمة المرور"
-                            className="w-full p-5 bg-white border border-gray-200 rounded-2xl text-center text-xl font-bold focus:ring-4 focus:ring-sky-500/20 focus:border-sky-500 outline-none transition-all shadow-sm"
-                            autoFocus
-                        />
-                        {error && <p className="text-red-500 font-bold">{error}</p>}
+                    <form onSubmit={handlePasswordSubmit} className="space-y-5">
+                        <div className="relative">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                value={password}
+                                onChange={(e) => { setPassword(e.target.value); setError(''); }}
+                                placeholder="كلمة المرور الخاصة بالمعلم"
+                                className="w-full p-4 pl-12 bg-white/90 border border-emerald-950/15 rounded-2xl text-center text-lg font-bold focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all shadow-sm"
+                                autoFocus
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                aria-label={showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'}
+                                className="absolute left-3 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-emerald-700"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    {showPassword ? (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.7 10.7 0 0112 5c5 0 8.3 4.5 9 7-.2.8-.8 1.8-1.7 2.8M6.2 6.2C3.9 7.7 2.4 10 2 12c.3 1.3 1.4 3.2 3.3 4.7A10.8 10.8 0 0012 19c1 0 1.9-.2 2.8-.5" />
+                                    ) : (
+                                        <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" strokeWidth="2" /></>
+                                    )}
+                                </svg>
+                            </button>
+                        </div>
+                        {error && <p className="text-red-600 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-200">{error}</p>}
 
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-3">
                             <button
                                 type="submit"
-                                className="w-full py-4 bg-sky-600 text-white rounded-2xl font-bold text-xl hover:bg-sky-700 transition-all transform active:scale-95 shadow-lg shadow-sky-500/20"
+                                disabled={isSubmitting}
+                                className="w-full py-4 arabic-gradient text-white rounded-2xl font-bold text-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 shadow-md border border-emerald-400/20"
                             >
-                                دخول
+                                {isSubmitting ? 'جارٍ التحقق...' : 'دخول لوحة التحكم'}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setShowPasswordInput(false)}
-                                className="w-full py-2 text-gray-400 hover:text-gray-600 font-medium transition-colors"
+                                className="w-full py-2.5 text-slate-500 hover:text-emerald-950 font-bold text-sm transition-colors"
                             >
-                                رجوع
+                                ← العودة لخيارات الدخول
                             </button>
                         </div>
                     </form>
@@ -76,67 +98,74 @@ const LoginSelection: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-12">
             <div className="max-w-4xl w-full">
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">تسجيل الدخول</h2>
-                    <p className="text-xl text-gray-600">من فضلك اختر نوع الحساب للمتابعة</p>
+                <div className="text-center mb-10">
+                    <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-300/60 mb-3 inline-block">
+                        مرحباً بك في منصة الأستاذ أحمد رفعت
+                    </span>
+                    <h2 className="text-4xl font-black text-emerald-950 mb-3 font-cairo">تسجيل الدخول</h2>
+                    <p className="text-lg text-slate-600 font-medium">من فضلك اختر نوع الحساب للمتابعة</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-                    {/* Teacher Card */}
-                    <button
-                        onClick={handleTeacherClick}
-                        className="group relative bg-white/70 backdrop-blur-md rounded-[2.5rem] p-10 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden text-right w-full"
-                    >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-bl-[5rem] -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-500"></div>
-
-                        <div className="relative z-10">
-                            <div className="w-20 h-20 bg-gradient-to-br from-sky-500 to-sky-600 rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform duration-500">
-                                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4">معلم / مسؤول</h3>
-                            <p className="text-gray-500 text-lg leading-relaxed">
-                                الدخول إلى لوحة التحكم لإدارة المنهج والطلاب والاختبارات.
-                            </p>
-
-                            <div className="mt-8 flex items-center gap-2 text-sky-600 font-bold group-hover:gap-4 transition-all duration-300">
-                                <span>دخول لوحة التحكم</span>
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </div>
-                        </div>
-                    </button>
-
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    
                     {/* Student Card */}
                     <button
                         onClick={handleStudentLogin}
-                        className="group relative bg-white/70 backdrop-blur-md rounded-[2.5rem] p-10 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden text-right w-full"
+                        className="group relative glass-card glass-card-hover rounded-[2.5rem] p-8 md:p-10 border border-white/80 shadow-xl text-right w-full flex flex-col justify-between overflow-hidden"
                     >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-bl-[5rem] -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-500"></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-bl-[5rem] -mr-8 -mt-8 group-hover:scale-125 transition-transform duration-500"></div>
 
                         <div className="relative z-10">
-                            <div className="w-20 h-20 bg-gradient-to-br from-teal-400 to-teal-500 rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-teal-500/30 group-hover:scale-110 transition-transform duration-500">
-                                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
+                            <div className="w-20 h-20 arabic-gradient rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-950/20 group-hover:scale-110 transition-transform duration-500 border border-amber-400/30">
+                                <span className="text-3xl">🎓</span>
                             </div>
 
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4">طالب</h3>
-                            <p className="text-gray-500 text-lg leading-relaxed">
-                                الدخول لمراجعة الدروس، المذكرات، والمشاركة في الاختبارات.
+                            <span className="bg-emerald-100 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">
+                                للطلاب والطالبات
+                            </span>
+                            <h3 className="text-3xl font-black text-emerald-950 mb-3 font-cairo">دخول الطالب</h3>
+                            <p className="text-slate-600 text-base leading-relaxed font-medium mb-6">
+                                متابعة دروس الفيديو، تحميل المذكرات والملخصات، وحل الاختبارات الإلكترونية لمرحلتك.
                             </p>
+                        </div>
 
-                            <div className="mt-8 flex items-center gap-2 text-teal-600 font-bold group-hover:gap-4 transition-all duration-300">
-                                <span>دخول الطالب</span>
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </div>
+                        <div className="pt-4 border-t border-emerald-950/10 flex items-center justify-between text-emerald-900 font-extrabold text-base group-hover:text-amber-700 transition-colors">
+                            <span>الانتقال لصفحة الطالب</span>
+                            <span className="w-9 h-9 rounded-full bg-emerald-100 group-hover:bg-amber-400 text-emerald-950 flex items-center justify-center text-sm transition-all duration-300">
+                                ←
+                            </span>
                         </div>
                     </button>
+
+                    {/* Teacher Card */}
+                    <button
+                        onClick={handleTeacherClick}
+                        className="group relative glass-card glass-card-hover rounded-[2.5rem] p-8 md:p-10 border border-white/80 shadow-xl text-right w-full flex flex-col justify-between overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-700/10 rounded-bl-[5rem] -mr-8 -mt-8 group-hover:scale-125 transition-transform duration-500"></div>
+
+                        <div className="relative z-10">
+                            <div className="w-20 h-20 gold-gradient rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform duration-500 border border-amber-300">
+                                <span className="text-3xl">👨‍🏫</span>
+                            </div>
+
+                            <span className="bg-amber-100 text-amber-900 text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">
+                                للمعلم والمسؤول
+                            </span>
+                            <h3 className="text-3xl font-black text-emerald-950 mb-3 font-cairo">لوحة التحكم</h3>
+                            <p className="text-slate-600 text-base leading-relaxed font-medium mb-6">
+                                إمكانية إضافة الدروس، رفع الفيديوهات والمذكرات، متابعة الطلاب وإنشاء الاختبارات.
+                            </p>
+                        </div>
+
+                        <div className="pt-4 border-t border-emerald-950/10 flex items-center justify-between text-amber-800 font-extrabold text-base group-hover:text-emerald-950 transition-colors">
+                            <span>دخول المعلم</span>
+                            <span className="w-9 h-9 rounded-full bg-amber-100 group-hover:bg-emerald-800 text-emerald-950 group-hover:text-white flex items-center justify-center text-sm transition-all duration-300">
+                                ←
+                            </span>
+                        </div>
+                    </button>
+
                 </div>
             </div>
         </div>

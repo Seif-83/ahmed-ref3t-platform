@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useContentStore } from '../useContentStore';
 import { PrepLevel, Lesson } from '../types';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
 // Converts any YouTube URL format to embed format
 function convertToEmbedUrl(url: string): string {
@@ -61,13 +63,6 @@ const AdminDashboard: React.FC = () => {
     const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
     const [generateCount, setGenerateCount] = useState<number>(5);
     const [generatedCodesPreview, setGeneratedCodesPreview] = useState<string[]>([]);
-
-    // Auth guard
-    useEffect(() => {
-        if (sessionStorage.getItem('admin_authenticated') !== 'true') {
-            navigate('/admin-login');
-        }
-    }, [navigate]);
 
     const activeLevel = levels.find(l => l.id === activeTab);
 
@@ -225,8 +220,9 @@ const AdminDashboard: React.FC = () => {
     };
 
     const handleLogout = () => {
-        sessionStorage.removeItem('admin_authenticated');
-        navigate('/');
+        void signOut(auth).finally(() => {
+            navigate('/');
+        });
     };
 
     const showSuccess = (msg: string) => {

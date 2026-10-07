@@ -1,0 +1,43 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "platform_content": {
+      ".read": "auth != null && auth.token.role == 'admin'",
+      ".write": "auth != null && auth.token.role == 'admin'"
+    },
+    "site_settings": {
+      ".read": "auth != null && auth.token.role == 'admin'",
+      ".write": "auth != null && auth.token.role == 'admin'"
+    },
+    "students": {
+      ".read": "auth != null && auth.token.role == 'admin'",
+      ".indexOn": ["phone"],
+      "$studentId": {
+        ".read": "auth != null && (auth.token.role == 'admin' || (auth.token.role == 'student' && auth.uid == $studentId))",
+        ".write": "auth != null && auth.token.role == 'admin'",
+        "level": {
+          ".write": "auth != null && auth.token.role == 'student' && auth.uid == $studentId",
+          ".validate": "newData.val() == '1st-prep' || newData.val() == '2nd-prep' || newData.val() == '3rd-prep'"
+        }
+      }
+    },
+    "student_unlocks": {
+      "$studentId": {
+        ".read": "auth != null && (auth.token.role == 'admin' || (auth.token.role == 'student' && auth.uid == $studentId))",
+        ".write": "auth != null && (auth.token.role == 'admin' || (auth.token.role == 'student' && auth.uid == $studentId))",
+        "$lessonId": {
+          ".validate": "newData.val() == true || newData.val() == false"
+        }
+      }
+    },
+    "exams": {
+      ".read": "auth != null && auth.token.role == 'admin'",
+      ".write": "auth != null && auth.token.role == 'admin'"
+    },
+    "exam_results": {
+      ".read": "auth != null && auth.token.role == 'admin'",
+      ".write": "auth != null && auth.token.role == 'admin'"
+    }
+  }
+}

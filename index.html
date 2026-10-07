@@ -4,96 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الأستاذ أحمد رفعت | التميز في اللغة العربية</title>
+    
+    <!-- Google Fonts: Cairo, Alexandria, Amiri -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <title>منصة أحمد رفعت | منصة تعليمية عربية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap"
-        rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Cairo', 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8fafc;
-        }
-
-        .science-gradient {
-            background: linear-gradient(135deg, #0ea5e9 0%, #2dd4bf 100%);
-        }
-
-        /* Creative Science Animations */
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-30px) rotate(10deg);
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        alexandria: ['Alexandria', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            850: '#062d27',
+                            950: '#031714',
+                        },
+                        amber: {
+                            450: '#f59e0b',
+                        }
+                    }
+                }
             }
         }
-
-        @keyframes sway {
-
-            0%,
-            100% {
-                transform: translateX(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateX(20px) rotate(-5deg);
-            }
-        }
-
-        @keyframes pulse-soft {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 0.15;
-            }
-
-            50% {
-                transform: scale(1.1);
-                opacity: 0.3;
-            }
-        }
-
-        .animate-science-float {
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .animate-science-sway {
-            animation: sway 12s ease-in-out infinite;
-        }
-
-        .animate-science-pulse {
-            animation: pulse-soft 4s ease-in-out infinite;
-        }
-
-        .bg-glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .science-grid {
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-    </style>
+    </script>
     <link rel="stylesheet" href="/index.css">
 </head>
 
-<body class="text-gray-900">
+<body class="bg-[#f7f9f8] text-slate-800 font-cairo antialiased selection:bg-amber-400 selection:text-emerald-950 overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

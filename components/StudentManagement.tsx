@@ -10,13 +10,6 @@ const StudentManagement: React.FC = () => {
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState('');
 
-    // Auth guard
-    useEffect(() => {
-        if (sessionStorage.getItem('admin_authenticated') !== 'true') {
-            navigate('/admin-login');
-        }
-    }, [navigate]);
-
     const showSuccess = (msg: string) => {
         setSuccessMsg(msg);
         setTimeout(() => setSuccessMsg(''), 3000);

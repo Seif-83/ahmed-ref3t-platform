@@ -5,59 +5,114 @@ const Hero: React.FC = () => {
   const { siteSettings } = useContentStore();
 
   return (
-    <div className="relative overflow-hidden pt-20 pb-32 z-10 bg-transparent">
-      <div className="absolute inset-0 arabic-pattern opacity-70"></div>
-      <div className="absolute -top-48 -right-24 w-[36rem] h-[36rem] rounded-full bg-emerald-900/10 blur-3xl"></div>
-      <div className="absolute -bottom-48 -left-24 w-[36rem] h-[36rem] rounded-full bg-amber-300/20 blur-3xl"></div>
-      <div className="absolute right-[8%] top-24 h-24 w-24 rounded-full border border-amber-300/50 animate-arabic-drift"></div>
-      <div className="absolute left-[12%] top-40 h-16 w-16 rotate-45 border border-emerald-700/20"></div>
+    <div className="relative overflow-hidden py-16 lg:py-24 z-10">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 -right-20 w-96 h-96 rounded-full bg-emerald-600/10 blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-10 -left-20 w-96 h-96 rounded-full bg-amber-500/10 blur-[100px] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Text content side */}
           <div className="lg:col-span-7 text-right order-1">
-            <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-emerald-900/10 bg-white/75 px-5 py-2 text-sm font-bold text-emerald-800 shadow-sm backdrop-blur">
-              <span className="arabic-ornament h-7 w-7"></span>
-              <span>منصة تعليم اللغة العربية</span>
+            {/* Top Pill Badge */}
+            <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-emerald-800/15 bg-white/80 px-4 py-2 text-sm font-bold text-emerald-950 shadow-sm backdrop-blur-md">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <span className="font-alexandria font-semibold text-emerald-900">منصة تعليم اللغة العربية المعتمدة</span>
+              <span className="bg-emerald-100 text-emerald-850 px-2.5 py-0.5 rounded-full text-xs font-bold">2025/2026</span>
             </div>
-            <h1 className="text-5xl lg:text-7xl font-black text-emerald-950 leading-tight mb-8">
-              <span className="block mb-4 text-emerald-900">العربية تفتح لك أبوابها مع</span>
-              <span className="block arabic-gradient bg-clip-text text-transparent">أحمد رفعت</span>
+
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-4xl lg:text-4xl font-black text-emerald-950 leading-snug sm:leading-relaxed mb-6 font-cairo">
+              <span className="block mb-3 text-emerald-950 font-black">
+                العربية تفتح لك أبواب التميز مع
+              </span>
+              <span className="inline-block text-amber-400 font-black relative">
+                <span className="gold-gradient-text">الأستاذ أحمد رفعت</span>
+              </span>
             </h1>
-            <p className="mt-8 text-2xl text-emerald-950/70 leading-relaxed max-w-2xl font-medium">
-              دروس عربية مبسطة، تمارين تفاعلية، ومتابعة دقيقة لكل طالب في رحلة تعلم اللغة العربية.
+
+            {/* Description */}
+            <p className="mt-4 text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl font-semibold">
+              شرح مبسط وشامل لمناهج اللغة العربية، تدريبات تفاعلية مستمرة، ومتابعة دقيقة تضمن لك أعلى الدرجات في النحو، البلاغة، والقراءة.
             </p>
-            <div className="mt-12 flex flex-wrap gap-6 justify-center lg:justify-start">
-              <a href="https://wa.me/201211143632" className="px-12 py-5 arabic-gradient text-white text-xl font-bold rounded-[2rem] shadow-2xl shadow-emerald-900/25 hover:scale-105 transition-all flex items-center gap-3">
-                <span>تواصل مع معلم العربية</span>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+
+            {/* Action Buttons */}
+            <div className="mt-10 flex flex-wrap gap-4 justify-start items-center">
+              <a
+                href="https://wa.me/201211143632"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-4 arabic-gradient text-white text-lg font-bold rounded-2xl shadow-xl shadow-emerald-950/20 hover:scale-105 transition-all duration-300 flex items-center gap-3 border border-emerald-400/20 group"
+              >
+                <span>تواصل عبر الواتساب</span>
+              </a>
+
+              <a
+                href="#levels"
+                className="px-8 py-4 bg-white/90 hover:bg-white text-emerald-950 text-lg font-bold rounded-2xl shadow-sm border border-emerald-950/10 hover:border-emerald-950/30 transition-all duration-300 flex items-center gap-2"
+              >
+                <span>استعرض المراحل الدراسية</span>
               </a>
             </div>
+
+            {/* Key Feature Stats Pills */}
+            <div className="mt-12 pt-8 border-t border-emerald-950/10 grid grid-cols-3 gap-4 max-w-lg">
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-emerald-950 font-alexandria mb-2">100%</span>
+                <span className="text-xs font-semibold text-slate-600">شرح مبسط وواضح</span>
+              </div>
+              <div className="flex flex-col border-r border-emerald-950/10 pr-4">
+                <span className="text-2xl font-black text-amber-700 font-alexandria mb-2">تفاعلي</span>
+                <span className="text-xs font-semibold text-slate-600">اختبارات إلكترونية</span>
+              </div>
+              <div className="flex flex-col border-r border-emerald-950/10 pr-4">
+                <span className="text-2xl font-black text-emerald-950 font-alexandria mb-2">مذكرات</span>
+                <span className="text-xs font-semibold text-slate-600">ملخصات PDF شاملة</span>
+              </div>
+            </div>
           </div>
 
+          {/* Teacher Image / Visual Display */}
           <div className="lg:col-span-5 relative order-2">
-            <div className="absolute -inset-4 rotate-2 rounded-[3.5rem] border border-amber-300/50 bg-amber-100/30"></div>
-            <div className="relative mx-auto w-full rounded-[3rem] shadow-2xl overflow-hidden ring-12 ring-white/50 backdrop-blur-sm">
+            {/* Golden Frame Accent */}
+            <div className="absolute -inset-3 rotate-2 rounded-[3rem] bg-gradient-to-tr from-amber-400/30 via-emerald-600/20 to-amber-300/40 blur-sm"></div>
+
+            <div className="relative mx-auto w-full rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-white bg-white">
               <img
-                className="w-full object-cover aspect-video lg:aspect-square"
+                className="w-full object-cover aspect-video lg:aspect-square group-hover:scale-105 transition-transform duration-700"
                 src={siteSettings.heroImage}
-                alt="تعلم اللغة العربية"
+                alt="الأستاذ أحمد رفعت - معلم اللغة العربية"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-transparent to-transparent"></div>
-              <div className="absolute bottom-5 right-5 end-5 rounded-2xl border border-white/25 bg-white/15 px-5 py-3 text-white backdrop-blur-md">
-                <p className="text-xs font-bold tracking-wide text-amber-200">دروسك المعاصرة</p>
-                <p className="text-lg font-black">تقدمك يبدأ من هنا</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-transparent to-transparent"></div>
+              
+          
+            </div>
+
+            {/* Floating Info Pill 1 */}
+            <div className="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-emerald-900/10 hidden sm:flex items-center gap-3 animate-float-slow">
+              <div className="w-10 h-10 rounded-xl gold-gradient text-emerald-950 font-bold flex items-center justify-center text-xl shadow-md">
+                🏆
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-bold text-emerald-950">تفوق في الإعراب والنحو</div>
+                <div className="text-xs font-medium text-emerald-700">أساليب ميسرة للفهم السريع</div>
               </div>
             </div>
-            <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl animate-arabic-drift hidden md:block">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-amber-100 text-2xl">📖</div>
-                <div>
-                  <div className="text-sm font-bold text-emerald-950">دروس تفاعلية</div>
-                  <div className="text-xs text-emerald-700">فهم عربي أصيل لكلمة واحدة</div>
-                </div>
+
+            {/* Floating Info Pill 2 */}
+            <div className="absolute -top-6 -left-6 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-emerald-900/10 hidden sm:flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-900 font-bold flex items-center justify-center text-base">
+                ✍️
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-extrabold text-emerald-950">متابعة مستمرة</div>
+                <div className="text-[11px] font-semibold text-amber-700">لكافة المستويات</div>
               </div>
             </div>
+
           </div>
+
         </div>
       </div>
     </div>

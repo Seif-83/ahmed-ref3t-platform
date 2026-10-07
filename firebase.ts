@@ -1,4 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getAnalytics, type Analytics } from 'firebase/analytics';
 import { getDatabase } from 'firebase/database';
 
@@ -14,5 +15,6 @@ const firebaseConfig = {
 };
 
 export const app: FirebaseApp = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 export const analytics: Analytics = getAnalytics(app);
 export const db = getDatabase(app, firebaseConfig.databaseURL);

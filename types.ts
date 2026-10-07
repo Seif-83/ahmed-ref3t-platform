@@ -19,6 +19,10 @@ export interface Lesson {
   code?: string;
   coverImage?: string; // base64 data URL or image URL for lesson cover
   // Single-use access codes for this lesson
+  requiresCode?: boolean;
+  availableCodes?: number;
+  hasVideos?: boolean;
+  hasNotes?: boolean;
   codes?: {
     value: string;
     used?: boolean;
