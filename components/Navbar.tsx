@@ -63,9 +63,7 @@ const Navbar: React.FC = () => {
           
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl arabic-gradient flex items-center justify-center text-amber-400 font-extrabold text-2xl shadow-md border border-amber-400/30 group-hover:scale-105 transition-all">
-              أ
-            </div>
+            
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-black text-xl text-emerald-950 font-alexandria tracking-tight">
