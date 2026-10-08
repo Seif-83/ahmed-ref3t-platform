@@ -3,7 +3,7 @@ import {
   firebaseDatabaseRequest,
   type ApiRequest,
   type ApiResponse,
-} from '../firebaseAdminServer';
+} from './firebaseAdminServer';
 
 type StudentRecord = {
   name: string;

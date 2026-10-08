@@ -3,7 +3,7 @@ import {
   verifyFirebaseIdToken,
   type ApiRequest,
   type ApiResponse,
-} from '../firebaseAdminServer';
+} from './firebaseAdminServer';
 import type { Exam, ExamResult } from '../types';
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {

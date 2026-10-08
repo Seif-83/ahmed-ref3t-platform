@@ -1,5 +1,5 @@
-import { timingSafeEqual } from 'node:crypto';
-import { createFirebaseCustomToken, type ApiRequest, type ApiResponse } from '../firebaseAdminServer';
+import { timingSafeEqual } from 'crypto';
+import { createFirebaseCustomToken, type ApiRequest, type ApiResponse } from './firebaseAdminServer';
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });

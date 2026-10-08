@@ -3,7 +3,7 @@ import {
   verifyFirebaseIdToken,
   type ApiRequest,
   type ApiResponse,
-} from '../firebaseAdminServer';
+} from './firebaseAdminServer';
 import type { Exam, PrepData, SiteSettings } from '../types';
 
 function getBearerToken(req: ApiRequest): string | null {
