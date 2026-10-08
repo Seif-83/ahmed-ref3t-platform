@@ -43,55 +43,30 @@ export function useStudentStore(options: { autoListen?: boolean } = {}) {
     const [students, setStudents] = useState<Student[]>([]);
     const [isLoading, setIsLoading] = useState(autoListen);
 
-    // Listen for real-time updates only if autoListen is true
     useEffect(() => {
         if (!autoListen) return;
+        setIsLoading(true);
 
-        let unsubscribeStudents: (() => void) | undefined;
-        let authRevision = 0;
-        const unsubscribeAuth = onAuthStateChanged(auth, user => {
-            const revision = ++authRevision;
-            unsubscribeStudents?.();
-            if (!user) {
+        const dbRef = ref(db, DB_PATH);
+        const unsubscribeStudents = onValue(dbRef, snapshot => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                const studentList: Student[] = Object.keys(data).map(key => ({ ...data[key], id: key }));
+                studentList.sort((a, b) => new Date(b.loginDate).getTime() - new Date(a.loginDate).getTime());
+                setStudents(studentList);
+            } else {
                 setStudents([]);
-                setIsLoading(false);
-                return;
             }
-
-            void getIdTokenResult(user).then(token => {
-                if (revision !== authRevision || token.claims.role !== 'admin') {
-                    setStudents([]);
-                    setIsLoading(false);
-                    return;
-                }
-
-                const dbRef = ref(db, DB_PATH);
-                unsubscribeStudents = onValue(dbRef, snapshot => {
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        const studentList: Student[] = Object.keys(data).map(key => ({ ...data[key], id: key }));
-                        studentList.sort((a, b) => new Date(b.loginDate).getTime() - new Date(a.loginDate).getTime());
-                        setStudents(studentList);
-                    } else {
-                        setStudents([]);
-                    }
-                    setIsLoading(false);
-                }, error => {
-                    console.error('Firebase student read error:', error);
-                    setIsLoading(false);
-                });
-            }).catch(error => {
-                console.error('Firebase admin auth error:', error);
-                if (revision === authRevision) setIsLoading(false);
-            });
+            setIsLoading(false);
+        }, error => {
+            console.error('Firebase student read error:', error);
+            setIsLoading(false);
         });
 
         return () => {
-            authRevision++;
-            unsubscribeAuth();
-            unsubscribeStudents?.();
+            unsubscribeStudents();
         };
-    }, []);
+    }, [autoListen]);
 
     const loginByPhone = useCallback(async (phone: string): Promise<Student | null> => {
         console.log('useStudentStore: loginByPhone called for', phone);

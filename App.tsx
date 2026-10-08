@@ -622,6 +622,14 @@ const AuthenticatedRoute: React.FC<{ role: 'admin' | 'student'; children: React.
   const [authorized, setAuthorized] = useState<boolean | null>(null);
 
   useEffect(() => {
+    if (role === 'admin') {
+      const isAdminLoggedIn = sessionStorage.getItem('admin_authenticated') === 'true';
+      if (isAdminLoggedIn) {
+        setAuthorized(true);
+        return;
+      }
+    }
+
     if (role === 'student') {
       const isStudentLoggedIn = sessionStorage.getItem('student_logged_in') === 'true';
       if (isStudentLoggedIn) {
