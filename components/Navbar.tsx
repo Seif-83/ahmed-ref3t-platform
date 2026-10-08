@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { signOut, onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useContentStore } from '../useContentStore';
@@ -9,14 +9,24 @@ import { useStudentStore } from '../useStudentStore';
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [isStudentLoggedIn, setIsStudentLoggedIn] = useState(() => sessionStorage.getItem('student_logged_in') === 'true');
-  const studentName = sessionStorage.getItem('student_name') || '';
-  const studentLevel = sessionStorage.getItem('student_level') || '';
+  const [studentName, setStudentName] = useState(() => sessionStorage.getItem('student_name') || '');
+  const [studentLevel, setStudentLevel] = useState(() => sessionStorage.getItem('student_level') || '');
   const { levels } = useContentStore();
   const { updateStudent } = useStudentStore();
 
   useEffect(() => {
+    const syncStudentState = () => {
+      const loggedIn = sessionStorage.getItem('student_logged_in') === 'true';
+      setIsStudentLoggedIn(loggedIn);
+      setStudentName(sessionStorage.getItem('student_name') || '');
+      setStudentLevel(sessionStorage.getItem('student_level') || '');
+    };
+
+    syncStudentState();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
@@ -28,6 +38,7 @@ const Navbar: React.FC = () => {
           } else if (token.claims.role === 'student') {
             setIsAdminLoggedIn(false);
             setIsStudentLoggedIn(true);
+            syncStudentState();
             return;
           }
         } catch (e) {
@@ -35,10 +46,15 @@ const Navbar: React.FC = () => {
         }
       }
       setIsAdminLoggedIn(false);
-      setIsStudentLoggedIn(sessionStorage.getItem('student_logged_in') === 'true');
+      syncStudentState();
     });
-    return () => unsubscribe();
-  }, []);
+
+    window.addEventListener('storage', syncStudentState);
+    return () => {
+      unsubscribe();
+      window.removeEventListener('storage', syncStudentState);
+    };
+  }, [location.pathname]);
 
   const handleLogout = () => {
     void signOut(auth).finally(() => {
