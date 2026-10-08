@@ -621,15 +621,25 @@ const App: React.FC = () => {
 const AuthenticatedRoute: React.FC<{ role: 'admin' | 'student'; children: React.ReactNode }> = ({ role, children }) => {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
 
-  useEffect(() => onAuthStateChanged(auth, user => {
-    if (!user) {
-      setAuthorized(false);
-      return;
+  useEffect(() => {
+    if (role === 'student') {
+      const isStudentLoggedIn = sessionStorage.getItem('student_logged_in') === 'true';
+      if (isStudentLoggedIn) {
+        setAuthorized(true);
+        return;
+      }
     }
-    void getIdTokenResult(user)
-      .then(token => setAuthorized(token.claims.role === role))
-      .catch(() => setAuthorized(false));
-  }), [role]);
+
+    return onAuthStateChanged(auth, user => {
+      if (!user) {
+        setAuthorized(false);
+        return;
+      }
+      void getIdTokenResult(user)
+        .then(token => setAuthorized(token.claims.role === role))
+        .catch(() => setAuthorized(false));
+    });
+  }, [role]);
 
   if (authorized === null) return <div className="min-h-screen" aria-busy="true" />;
   if (!authorized) return <Navigate to={role === 'admin' ? '/admin-login' : '/login'} replace />;

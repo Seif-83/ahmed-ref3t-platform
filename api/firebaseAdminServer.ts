@@ -37,12 +37,12 @@ function getServiceAccount(): ServiceAccount {
     }
   }
 
-  const projectId = account?.project_id || process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = account?.client_email || process.env.FIREBASE_CLIENT_EMAIL;
+  const projectId = account?.project_id || process.env.FIREBASE_PROJECT_ID || 'ahmed-ref3t-platform';
+  const clientEmail = account?.client_email || process.env.FIREBASE_CLIENT_EMAIL || 'firebase-adminsdk-fbsvc@ahmed-ref3t-platform.iam.gserviceaccount.com';
   let privateKey = account?.private_key || process.env.FIREBASE_PRIVATE_KEY;
 
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT, project_id, client_email, or private_key is missing in Vercel environment variables');
+  if (!privateKey) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT or FIREBASE_PRIVATE_KEY is missing in Vercel environment variables');
   }
 
   privateKey = privateKey.replace(/\\n/g, '\n');
@@ -101,8 +101,7 @@ export async function firebaseDatabaseRequest<T>(
   body?: unknown,
   query: Record<string, string> = {},
 ): Promise<T> {
-  const databaseUrl = process.env.FIREBASE_DATABASE_URL;
-  if (!databaseUrl) throw new Error('FIREBASE_DATABASE_URL environment variable is not configured');
+  const databaseUrl = process.env.FIREBASE_DATABASE_URL || 'https://ahmed-ref3t-platform-default-rtdb.firebaseio.com';
 
   const url = new URL(`${databaseUrl.replace(/\/$/, '')}/${path.replace(/^\//, '')}.json`);
   Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, value));
