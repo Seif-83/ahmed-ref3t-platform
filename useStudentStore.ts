@@ -20,7 +20,13 @@ async function requestStudentAuth(body: Record<string, string>) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
     });
-    const result = await response.json() as { token?: string; student?: Student | null; id?: string; error?: string };
+    const text = await response.text();
+    let result: { token?: string; student?: Student | null; id?: string; error?: string } = {};
+    try {
+        result = JSON.parse(text);
+    } catch (e) {
+        throw new Error('تعذر الاتصال بالسيرفر. يرجى التأكد من إضافة متغيرات البيئة في Vercel والضغط على Redeploy.');
+    }
     if (!response.ok) throw new Error(result.error || 'تعذر الاتصال بقاعدة البيانات');
     if (result.token) await signInWithCustomToken(auth, result.token);
     return result;
