@@ -83,8 +83,10 @@ async function getGoogleAccessToken(): Promise<string> {
       assertion,
     }),
   });
-  const result = await response.json() as { access_token?: string; expires_in?: number };
-  if (!response.ok || !result.access_token) throw new Error('Could not authenticate with Google');
+  const result = await response.json() as { access_token?: string; expires_in?: number; error?: string; error_description?: string };
+  if (!response.ok || !result.access_token) {
+    throw new Error(`Google Auth Error: ${result.error_description || result.error || response.statusText}`);
+  }
 
   cachedAccessToken = {
     token: result.access_token,
@@ -100,7 +102,7 @@ export async function firebaseDatabaseRequest<T>(
   query: Record<string, string> = {},
 ): Promise<T> {
   const databaseUrl = process.env.FIREBASE_DATABASE_URL;
-  if (!databaseUrl) throw new Error('FIREBASE_DATABASE_URL is not configured');
+  if (!databaseUrl) throw new Error('FIREBASE_DATABASE_URL environment variable is not configured');
 
   const url = new URL(`${databaseUrl.replace(/\/$/, '')}/${path.replace(/^\//, '')}.json`);
   Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, value));
@@ -114,7 +116,10 @@ export async function firebaseDatabaseRequest<T>(
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const result = await response.json();
-  if (!response.ok) throw new Error('Firebase database request failed');
+  if (!response.ok) {
+    const detail = typeof result === 'object' && result?.error ? JSON.stringify(result.error) : response.statusText;
+    throw new Error(`Firebase DB Error (${response.status}): ${detail}`);
+  }
   return result as T;
 }
 

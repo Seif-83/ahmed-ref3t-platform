@@ -20,7 +20,10 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   res.setHeader('Cache-Control', 'no-store');
 
-  const body = req.body as { action?: string; phone?: string; name?: string; level?: string } | undefined;
+  let body: any = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch (e) {}
+  }
   const phone = body?.phone?.trim().replace(/\s/g, '');
   if (!phone || !phonePattern.test(phone)) {
     return res.status(400).json({ error: 'يرجى إدخال رقم هاتف مصري صحيح' });
