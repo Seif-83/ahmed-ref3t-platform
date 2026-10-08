@@ -18,14 +18,25 @@ const Navbar: React.FC = () => {
   const { updateStudent } = useStudentStore();
 
   useEffect(() => {
-    const syncStudentState = () => {
-      const loggedIn = sessionStorage.getItem('student_logged_in') === 'true';
-      setIsStudentLoggedIn(loggedIn);
-      setStudentName(sessionStorage.getItem('student_name') || '');
-      setStudentLevel(sessionStorage.getItem('student_level') || '');
+    const syncState = () => {
+      const isAdmin = sessionStorage.getItem('admin_authenticated') === 'true';
+      const isStudent = sessionStorage.getItem('student_logged_in') === 'true';
+
+      if (isAdmin) {
+        setIsAdminLoggedIn(true);
+        setIsStudentLoggedIn(false);
+      } else if (isStudent) {
+        setIsAdminLoggedIn(false);
+        setIsStudentLoggedIn(true);
+        setStudentName(sessionStorage.getItem('student_name') || '');
+        setStudentLevel(sessionStorage.getItem('student_level') || '');
+      } else {
+        setIsAdminLoggedIn(false);
+        setIsStudentLoggedIn(false);
+      }
     };
 
-    syncStudentState();
+    syncState();
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -38,26 +49,25 @@ const Navbar: React.FC = () => {
           } else if (token.claims.role === 'student') {
             setIsAdminLoggedIn(false);
             setIsStudentLoggedIn(true);
-            syncStudentState();
             return;
           }
         } catch (e) {
           console.error('Navbar auth error:', e);
         }
       }
-      setIsAdminLoggedIn(false);
-      syncStudentState();
+      syncState();
     });
 
-    window.addEventListener('storage', syncStudentState);
+    window.addEventListener('storage', syncState);
     return () => {
       unsubscribe();
-      window.removeEventListener('storage', syncStudentState);
+      window.removeEventListener('storage', syncState);
     };
   }, [location.pathname]);
 
   const handleLogout = () => {
     void signOut(auth).finally(() => {
+      sessionStorage.removeItem('admin_authenticated');
       sessionStorage.removeItem('student_logged_in');
       sessionStorage.removeItem('student_name');
       sessionStorage.removeItem('student_phone');
