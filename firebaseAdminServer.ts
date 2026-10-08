@@ -14,6 +14,9 @@ function getServiceAccount(): ServiceAccount {
   if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT is not configured');
 
   const account = JSON.parse(raw) as ServiceAccount;
+  if (account.private_key) {
+    account.private_key = account.private_key.replace(/\\n/g, '\n');
+  }
   if (!account.project_id || !account.client_email || !account.private_key) {
     throw new Error('Firebase service account is incomplete');
   }
