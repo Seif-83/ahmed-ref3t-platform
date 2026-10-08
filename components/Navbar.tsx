@@ -62,18 +62,17 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-20 items-center">
           
           {/* Logo & Brand */}
-          <Link to="/" className="flex items-center gap-3 group">
-            
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-xl text-emerald-950 font-alexandria tracking-tight">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
+            <div className="flex flex-col text-right">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-black text-base sm:text-xl text-emerald-950 font-alexandria tracking-tight">
                   الأستاذ أحمد رفعت
                 </span>
-                <span className="bg-amber-100 text-amber-900 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300/60 shadow-xs">
+                <span className="bg-amber-100 text-amber-900 text-[10px] sm:text-[11px] font-extrabold px-2 py-0.5 rounded-full border border-amber-300/60 shadow-xs">
                   لغة عربية
                 </span>
               </div>
-              <span className="text-xs font-bold text-emerald-800/80">منصة التفوق والتأسيس في اللغة العربية</span>
+              <span className="text-[10px] sm:text-xs font-bold text-emerald-800/80 leading-tight">منصة التفوق والتأسيس في اللغة العربية</span>
             </div>
           </Link>
 
@@ -119,7 +118,6 @@ const Navbar: React.FC = () => {
                     <span className="text-xs font-bold text-emerald-950 leading-none">
                       {studentName}
                     </span>
-                    <span className="text-[11px] font-bold text-amber-700">طالب متميز</span>
                   </div>
                 </div>
 
@@ -146,17 +144,6 @@ const Navbar: React.FC = () => {
                   ))}
                 </select>
 
-                {/* Instapay / Payment link */}
-                <a
-                  href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="gold-gradient text-emerald-950 px-3 py-1.5 rounded-xl font-black text-xs hover:shadow-md hover:scale-105 transition-all flex items-center gap-1.5 border border-amber-300"
-                >
-                  <span>💳</span>
-                  <span>وسيلة دفع</span>
-                </a>
-
                 {/* Logout */}
                 <button
                   onClick={handleLogout}
@@ -170,15 +157,6 @@ const Navbar: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <a
-                  href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-4 py-2.5 rounded-2xl font-black text-sm transition-all flex items-center gap-2 shadow-xs"
-                >
-                  <span>💳</span>
-                  <span>وسيلة دفع</span>
-                </a>
                 <Link
                   to="/login"
                   className="arabic-gradient text-white px-6 py-2.5 rounded-2xl font-black text-sm shadow-md shadow-emerald-950/20 hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2 border border-emerald-400/20"
@@ -194,26 +172,16 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            {!isAdminLoggedIn && (
-              <a
-                href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="gold-gradient text-emerald-950 text-xs px-3 py-1.5 rounded-xl font-bold shadow-sm"
-              >
-                وسيلة دفع
-              </a>
-            )}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2.5 rounded-2xl bg-emerald-50 text-emerald-950 hover:bg-emerald-100 transition-all focus:outline-none"
+              className="p-2.5 rounded-2xl bg-emerald-50 text-emerald-950 hover:bg-emerald-100 transition-all border border-emerald-900/10 active:scale-95 shadow-xs"
               aria-label="القائمة"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16m-7 6h7" />
                 )}
               </svg>
             </button>
@@ -235,9 +203,7 @@ const Navbar: React.FC = () => {
             {/* Drawer Header */}
             <div className="p-5 border-b border-emerald-900/10 flex justify-between items-center arabic-gradient text-white">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-400 text-emerald-950 font-amiri font-bold text-xl flex items-center justify-center">
-                  أ
-                </div>
+                
                 <div>
                   <h3 className="font-extrabold text-base text-white">الأستاذ أحمد رفعت</h3>
                   <p className="text-xs text-amber-300 font-medium">منصة اللغة العربية</p>
@@ -326,17 +292,6 @@ const Navbar: React.FC = () => {
                     </select>
                   </div>
 
-                  <a
-                    href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-3 gold-gradient text-emerald-950 rounded-xl font-bold shadow-md hover:shadow-lg transition-all text-sm"
-                  >
-                    <span>💳</span>
-                    <span>وسيلة الدفع الإلكتروني</span>
-                  </a>
-
                   <button
                     onClick={handleLogout}
                     className="w-full py-3 bg-white text-red-600 border border-red-200 rounded-xl font-bold text-sm hover:bg-red-50 transition-all flex items-center justify-center gap-2 shadow-sm"
@@ -354,17 +309,6 @@ const Navbar: React.FC = () => {
                     <span>تسجيل الدخول</span>
                     <span className="text-amber-300 font-bold">👨‍🎓</span>
                   </Link>
-
-                  <a
-                    href="https://ipn.eg/S/amrmohsenhassanaly/instapay/21x3Xu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-3 gold-gradient text-emerald-950 rounded-2xl font-bold text-sm shadow-sm"
-                  >
-                    <span>💳</span>
-                    <span>وسيلة دفع</span>
-                  </a>
                 </div>
               )}
             </div>

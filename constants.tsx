@@ -20,7 +20,7 @@ export const PREP_LEVELS_DATA: PrepData[] = [
     id: '1st-prep',
     title: '1st Prep',
     titleAr: 'الصف الأول الإعدادي',
-    image: 'sections/1st.png',
+    image: 'sections/1st.jpeg',
     description: 'مسارات تعليمية مبسطة، فيديوهات، ومذكرات لتأسيس أساس فهم اللغة العربية.',
     lessons: []
   },
@@ -28,7 +28,7 @@ export const PREP_LEVELS_DATA: PrepData[] = [
     id: '2nd-prep',
     title: '2nd Prep',
     titleAr: 'الصف الثاني الإعدادي',
-    image: 'sections/2nd.png',
+    image: 'sections/2nd.jpeg',
     description: 'توسع في تعلم القراءة، الكتابة، النحو، والمفردات العربية.',
     lessons: []
   },
@@ -36,7 +36,7 @@ export const PREP_LEVELS_DATA: PrepData[] = [
     id: '3rd-prep',
     title: '3rd Prep',
     titleAr: 'الصف الثالث الإعدادي',
-    image: 'sections/3rd.png',
+    image: 'sections/3rd.jpeg',
     description: 'تطوير مهارات التعبير، الفهم، والقراءة في اللغة العربية.',
     lessons: []
   }

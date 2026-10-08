@@ -84,33 +84,34 @@ const StudentLogin: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-12">
-            <div className="glass-card rounded-[2.5rem] p-8 md:p-12 text-center max-w-md w-full border border-white/80 shadow-2xl relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center relative z-10 px-4 py-8 sm:py-12">
+            <div className="glass-card rounded-[2.5rem] p-6 sm:p-10 text-center max-w-md w-full border border-white/80 shadow-2xl relative overflow-hidden">
                 
                 {/* Decorative Top Accent */}
                 <div className="absolute top-0 right-0 left-0 h-2 arabic-gradient"></div>
 
                 {/* Student Avatar Icon */}
-                <div className="w-20 h-20 arabic-gradient rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-950/20 border border-amber-400/30">
-                    <span className="text-3xl">🎓</span>
+                <div className="w-16 h-16 sm:w-20 sm:h-20 arabic-gradient rounded-3xl flex items-center justify-center mx-auto mb-5 sm:mb-6 shadow-lg shadow-emerald-950/20 border border-amber-400/30">
+                    <span className="text-2xl sm:text-3xl">🎓</span>
                 </div>
 
                 {step === 1 ? (
                     <>
-                        <h2 className="text-3xl font-black text-emerald-950 mb-2 font-cairo">دخول الطالب</h2>
-                        <p className="text-slate-600 mb-8 text-sm font-semibold">أدخل رقم الهاتف للمتابعة والدخول للمحتوى</p>
+                        <h2 className="text-2xl sm:text-3xl font-black text-emerald-950 mb-2 font-cairo">دخول الطالب</h2>
+                        <p className="text-slate-600 mb-6 sm:mb-8 text-xs sm:text-sm font-semibold">أدخل رقم الهاتف للمتابعة والدخول للمحتوى</p>
 
-                        <form onSubmit={handlePhoneSubmit} className="space-y-5">
+                        <form onSubmit={handlePhoneSubmit} className="space-y-4 sm:space-y-5">
                             <div>
                                 <label className="block text-right text-xs font-extrabold text-emerald-950 mb-2 mr-1">
                                     رقم الهاتف (واتساب):
                                 </label>
                                 <input
                                     type="tel"
+                                    inputMode="numeric"
                                     value={phone}
                                     onChange={(e) => { setPhone(e.target.value); setError(''); }}
                                     placeholder="01XXXXXXXXX"
-                                    className="w-full p-4 bg-white/90 border border-emerald-950/15 rounded-2xl text-center text-lg font-bold tracking-wider focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all shadow-sm dir-ltr"
+                                    className="w-full p-3.5 sm:p-4 bg-white/90 border border-emerald-950/15 rounded-2xl text-center text-base sm:text-lg font-bold tracking-wider focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all shadow-sm dir-ltr"
                                     maxLength={11}
                                     autoFocus
                                 />
@@ -125,7 +126,7 @@ const StudentLogin: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-4 arabic-gradient text-white rounded-2xl font-bold text-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 shadow-md border border-emerald-400/20 disabled:opacity-60"
+                                className="w-full py-3.5 sm:py-4 arabic-gradient text-white rounded-2xl font-bold text-base sm:text-lg hover:shadow-xl active:scale-[0.98] transition-all duration-300 shadow-md border border-emerald-400/20 disabled:opacity-60"
                             >
                                 {isSubmitting ? (
                                     <span className="flex items-center justify-center gap-2">

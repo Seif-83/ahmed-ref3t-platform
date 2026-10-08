@@ -34,6 +34,8 @@ body {
   background-color: var(--bg-main);
   position: relative;
   min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
 
 /* Flexible & Responsive Images */

@@ -86,16 +86,16 @@ const HomePage: React.FC = () => {
       <Hero />
 
       {/* Main Levels Section */}
-      <section id="levels" className="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+      <section id="levels" className="py-10 sm:py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-10 sm:mb-16">
           <span className="bg-amber-100 text-amber-900 text-xs font-bold px-4 py-1.5 rounded-full border border-amber-300/60 mb-3 inline-block">
             {isStudentLoggedIn ? 'مرحلتك الحالية' : 'المراحل الدراسية'}
           </span>
-          <h2 className="text-4xl font-black text-emerald-950 font-cairo">
+          <h2 className="text-2xl sm:text-4xl font-black text-emerald-950 font-cairo">
             {isStudentLoggedIn ? 'محتوى مرحلتك الدراسية' : 'اختر مرحلتك الدراسية'}
           </h2>
-          <div className="mt-3 h-1.5 w-24 gold-gradient mx-auto rounded-full"></div>
-          <p className="mt-4 text-slate-600 max-w-2xl mx-auto text-base font-medium">
+          <div className="mt-3 h-1.5 w-20 sm:w-24 gold-gradient mx-auto rounded-full"></div>
+          <p className="mt-3 sm:mt-4 text-slate-600 max-w-2xl mx-auto text-sm sm:text-base font-medium">
             كل ما تحتاجه لتتعلم اللغة العربية وتتقن النحو والبلاغة والقراءة مع الأستاذ أحمد رفعت.
           </p>
         </div>

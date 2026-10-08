@@ -35,41 +35,41 @@ const PrepLevelCard: React.FC<Props> = ({ data, isStudentLoggedIn }) => {
       </div>
 
       {/* Card Body */}
-      <div className="p-7 flex-grow flex flex-col justify-between">
+      <div className="p-5 sm:p-7 flex-grow flex flex-col justify-between">
         <div>
-          <h3 className="text-2xl font-black text-emerald-950 mb-3 font-cairo tracking-tight group-hover:text-amber-700 transition-colors">
+          <h3 className="text-xl sm:text-2xl font-black text-emerald-950 mb-2 sm:mb-3 font-cairo tracking-tight group-hover:text-amber-700 transition-colors">
             {data.titleAr}
           </h3>
-          <p className="text-slate-600 text-sm leading-relaxed mb-6 font-medium line-clamp-3">
+          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5 sm:mb-6 font-medium line-clamp-3">
             {data.description}
           </p>
         </div>
 
         {/* Action Buttons */}
         {isStudentLoggedIn && (
-        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-emerald-950/10">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 pt-4 border-t border-emerald-950/10">
           <Link
             to={`/level/${data.id}/courses`}
-            className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-emerald-50 text-emerald-900 border border-emerald-200/60 hover:arabic-gradient hover:text-white hover:border-transparent transition-all duration-300 group/btn shadow-sm"
+            className="flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-2xl bg-emerald-50 text-emerald-900 border border-emerald-200/60 "
           >
-            <div className="flex items-center gap-1.5 font-bold text-sm mb-0.5">
+            <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm mb-0.5">
               <span>📹</span>
               <span>الفيديوهات</span>
             </div>
-            <span className="text-[11px] font-semibold text-emerald-700 group-hover/btn:text-amber-300">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-emerald-700 group-hover/btn:text-amber-300">
               مشاهدة الدروس
             </span>
           </Link>
 
           <Link
             to={`/level/${data.id}/notes`}
-            className="flex flex-col items-center justify-center p-3.5 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200/60 hover:gold-gradient hover:text-emerald-950 hover:border-transparent transition-all duration-300 group/btn shadow-sm"
+            className="flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200/60   "
           >
-            <div className="flex items-center gap-1.5 font-bold text-sm mb-0.5">
+            <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm mb-0.5">
               <span>📚</span>
               <span>المذكرات</span>
             </div>
-            <span className="text-[11px] font-semibold text-amber-800 group-hover/btn:text-emerald-950">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-amber-800 group-hover/btn:text-emerald-950">
               تحميل الـ PDF
             </span>
           </Link>
