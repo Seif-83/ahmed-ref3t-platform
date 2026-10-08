@@ -11,19 +11,47 @@ let cachedFirebaseCerts: { certs: Record<string, string>; expiresAt: number } | 
 
 function getServiceAccount(): ServiceAccount {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT is not configured');
+  let account: Partial<ServiceAccount> | null = null;
 
-  const account = JSON.parse(raw) as ServiceAccount;
-  if (account.private_key) {
-    account.private_key = account.private_key.replace(/\\n/g, '\n');
+  if (raw) {
+    let str = raw.trim();
+    // Try base64 decoding if not starting with {
+    if (!str.startsWith('{')) {
+      try {
+        str = Buffer.from(str, 'base64').toString('utf-8');
+      } catch (e) {
+        // keep as is
+      }
+    }
+
+    try {
+      account = JSON.parse(str);
+    } catch (e) {
+      try {
+        // Replace unescaped newlines inside JSON string value
+        const sanitized = str.replace(/\r?\n/g, '\\n');
+        account = JSON.parse(sanitized);
+      } catch (err) {
+        throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is invalid JSON');
+      }
+    }
   }
-  if (!account.project_id || !account.client_email || !account.private_key) {
-    throw new Error('Firebase service account is incomplete');
+
+  const projectId = account?.project_id || process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = account?.client_email || process.env.FIREBASE_CLIENT_EMAIL;
+  let privateKey = account?.private_key || process.env.FIREBASE_PRIVATE_KEY;
+
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT, project_id, client_email, or private_key is missing in Vercel environment variables');
   }
-  if (account.project_id !== process.env.FIREBASE_PROJECT_ID) {
-    throw new Error('Firebase service account belongs to a different project');
-  }
-  return account;
+
+  privateKey = privateKey.replace(/\\n/g, '\n');
+
+  return {
+    project_id: projectId,
+    client_email: clientEmail,
+    private_key: privateKey,
+  };
 }
 
 function signJwt(payload: Record<string, unknown>, account: ServiceAccount): string {

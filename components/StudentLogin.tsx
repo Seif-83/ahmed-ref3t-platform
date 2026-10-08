@@ -45,9 +45,9 @@ const StudentLogin: React.FC = () => {
             if (err.message?.includes('Permission denied')) {
                 setError('عذراً، لا توجد صلاحيات للوصول لقاعدة البيانات. يرجى مراجعة المعلم.');
             } else if (err.message?.includes('timeout')) {
-                setError('حدث خطأ في الاتصال، يرجى المحاولة مرة أخرى');
+                setError('حدث خطأ في مهلة الاتصال، يرجى المحاولة مرة أخرى');
             } else {
-                setError('حدث خطأ في الاتصال، يرجى المحاولة مرة أخرى');
+                setError(err.message || 'حدث خطأ في الاتصال، يرجى المحاولة مرة أخرى');
             }
         } finally {
             setIsSubmitting(false);

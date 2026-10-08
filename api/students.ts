@@ -64,8 +64,9 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     const id = created.name;
     const token = await createFirebaseCustomToken(id, { role: 'student', phone, name });
     return res.status(201).json({ student: { ...record, id }, token });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Student authentication failed:', error);
-    return res.status(500).json({ error: 'تعذر الاتصال بقاعدة البيانات' });
+    const msg = error instanceof Error ? error.message : 'تعذر الاتصال بقاعدة البيانات';
+    return res.status(500).json({ error: msg });
   }
 }
